@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head><title>noopener test</title></head>
+<!DOCTYPE HTML>
+<html>
+<!--
+Test whether the speculative parser should use the referrerpolicy attribute
+https://bugzilla.mozilla.org/show_bug.cgi?id=1399780
+-->
+<head>
+  <meta charset="utf-8">
+  <script language="javascript" type="text/javascript">
+    var img = document.createElement("img");
+    img.src = "https://homepages.cae.wisc.edu/~ece533/images/boat.png";
+
+    var src = document.getElementById("body");
+    src.appendChild(img);
+  </script>
+  <meta name='referrer' content='origin'>
+  <img src="https://homepages.cae.wisc.edu/~ece533/images/boat.png"/>
+</head>
 <body>
-
-<p><a href="bug1502678.html" target="_blank" rel="">link with target = "_blank" and rel = ""</a></p>
-<p><a href="bug1502678.html" target="_blank" rel="noopener">link with target = "_blank" and rel = "noopener"</a></p>
-<p><a href="bug1502678.html" target="_blank" rel="noreferrer">link with target = "_blank" and rel = "noreferrer"</a></p>
-
-<p id="msgs"></p>
-
-<script>
-var msgs = document.getElementById('msgs');
-msgs.innerHTML = 'document.referrer is ' + document.referrer + '<br>';
-var opener = window.opener;
-if (! opener) {
-  msgs.innerHTML += 'window.opener is null';  
-} else {
-  msgs.innerHTML += 'window.opener is available';
-}
-</script>
-
+  <img src="https://homepages.cae.wisc.edu/~ece533/images/boat.png" referrerpolicy="unsafe-url"/>
 </body>
 </html>
