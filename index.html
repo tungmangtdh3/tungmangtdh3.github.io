@@ -1,22 +1,48 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-<!--
-Test whether the speculative parser should use the referrerpolicy attribute
-https://bugzilla.mozilla.org/show_bug.cgi?id=1399780
--->
 <head>
   <meta charset="utf-8">
-  <script language="javascript" type="text/javascript">
-    var img = document.createElement("img");
-    img.src = "https://homepages.cae.wisc.edu/~ece533/images/boat.png";
-
-    var src = document.getElementById("body");
-    src.appendChild(img);
-  </script>
-  <meta name='referrer' content='origin'>
-  <img src="https://homepages.cae.wisc.edu/~ece533/images/boat.png"/>
+  <title>Permission Prompts in iframes</title>
+  <style>
+    .site {
+      float: left;
+      margin: 15px;
+    }
+    button {
+      display: block;
+      padding: 5px;
+    }
+  </style>
 </head>
 <body>
-  <img src="https://homepages.cae.wisc.edu/~ece533/images/boat.png" referrerpolicy="unsafe-url"/>
+  <div class="site">
+  <script>Notification.requestPermission(console.log)</script>
+    <h2>This page</h2>
+    <button id="geo" onclick="navigator.geolocation.getCurrentPosition(console.log, console.error)">Geolocation</button>
+    <button id="webRTC-shareDevices" onclick="shareDevice({video: true});">Video</button>
+    <button id="webRTC-shareMicrophone" onclick="shareDevice({audio: true});">Audio</button>
+    <button id="webRTC-shareDevices2" onclick="shareDevice({audio: true, video: true});">Audio and Video</button>
+    <button id="webRTC-shareScreen" onclick="shareDevice({video: {mediaSource: 'screen'}});">Screen</button>
+    <button id="web-notifications" onclick="Notification.requestPermission()">web-notifications</button>
+    <script type="application/javascript">
+     // Share device used in onclick calls above.
+     /* exported shareDevice */
+     function shareDevice(config) {
+       navigator.mediaDevices.getUserMedia(config);
+     }
+    </script>
+  <div class="site">
+    <h2>http://mozilla.github.io/webrtc-landing/gum_test.html</h2>
+    <iframe width="500" height="500" src="http://mozilla.github.io/webrtc-landing/gum_test.html"></iframe>
+  </div>
+  <div class="site">
+    <h2>https://mozilla.github.io/webrtc-landing/gum_test.html with FP allowed</h2>
+    <iframe allow="camera; microphone" width="500" height="500" src="https://mozilla.github.io/webrtc-landing/gum_test.html"></iframe>
+  </div>
+  <div class="site">
+    <h2>https://permission.site allow star</h2>
+    <iframe allow="camera *" width="500" height="500" src="https://permission.site"></iframe>
+  </div>
 </body>
 </html>
+
